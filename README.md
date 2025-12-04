@@ -57,6 +57,14 @@ forge script script/SolveChallenge.s.sol:SolveChallenge \
   --broadcast
 ```
 
+### How I solved the challenge
+
+You can run the fuzz test `testFuzz_findNumber`, but it’s extremely hard to find the right `numberr` by brute force. I tried with `100_000_000` runs and realized that, since there is effectively a single `uint128` that solves the challenge, it’s astronomically unlikely to hit it randomly given the size of the `uint128` space and Foundry’s practical fuzz limits.
+
+Instead, I narrowed down the search space and used AI to help analyze the `hellFunc` logic in `12-LessonHelper.sol`. From that analysis, I inferred that only the value `99` makes `hellFunc` revert, and I wrote `test_hellFunc` in `HellTest.t.sol` to confirm that `hellFunc(99)` reverts while nearby values do not.
+
+Once I had the solution (`numberr = 99`), I used the scripts above to call `solveChallenge` on the Sepolia `LessonTwelve` contract and mint the NFT.
+
 ### Result
 
 I have already solved the challenge and minted the NFT on Sepolia:
